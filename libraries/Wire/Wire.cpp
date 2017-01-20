@@ -102,12 +102,15 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity)
   return requestFrom(address, quantity, true);
 }
 
-void TwoWire::beginTransmission(uint8_t address) {
+bool TwoWire::beginTransmission(uint8_t address) {
   // save address of target and clear buffer
+  if (rxBuffer.available())
+    return false;
   txAddress = address;
   txBuffer.clear();
 
   transmissionBegun = true;
+  return true;
 }
 
 // Errors:
